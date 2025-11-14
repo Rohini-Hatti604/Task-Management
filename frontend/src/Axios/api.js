@@ -16,15 +16,15 @@ API.interceptors.request.use((config) => {
     return config;
 });
 
-// Response interceptor to handle 401 errors
+
 API.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Clear token if unauthorized
+            
             localStorage.removeItem("token");
             localStorage.removeItem("user");
-            // You can dispatch a logout action here if needed
+            
         }
         return Promise.reject(error);
     }

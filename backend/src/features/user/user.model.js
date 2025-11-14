@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Password is required"],
   },
   userPhoto: {
-    type: String, // Either a URL or an uploaded image path
+    type: String, 
   },
 });
 

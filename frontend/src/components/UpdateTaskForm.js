@@ -49,9 +49,9 @@ const UpdateTaskForm = ({ open, onClose, task, sectionId }) => {
         dueDate: dayjs(task.dueDate),
         assignee: task.assignee || "",
       });
-      // Load comments for this task
+      
       fetchComments(task._id);
-      // Load attachments for this task
+      
       fetchAttachments(task._id);
     }
   }, [task]);
@@ -64,7 +64,7 @@ const UpdateTaskForm = ({ open, onClose, task, sectionId }) => {
       });
       setComments(res.data || []);
     } catch (e) {
-      // silently ignore for now
+      
     }
   };
 
@@ -130,11 +130,11 @@ const UpdateTaskForm = ({ open, onClose, task, sectionId }) => {
     } catch (e) {}
   };
 
-  // Helpers for attachments
+ 
   const backendOrigin = (() => {
     try {
       const base = API.defaults.baseURL || '';
-      // Remove trailing /api if present
+     
       const url = new URL(base, window.location.origin);
       return url.origin;
     } catch (_) {

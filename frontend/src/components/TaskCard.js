@@ -28,7 +28,7 @@ dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 dayjs.extend(isTomorrow);
 
-// Helpers to generate deterministic colored avatars from a name
+
 const stringToColor = (str = "") => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -63,7 +63,7 @@ const TaskCard = memo(({ task, sectionId }) => {
   const theme = useTheme();
   const { text: dueText, color: dueColor } = formatDueDate(task.dueDate, theme);
 
-  // Drag handling
+  
   const [{ isDragging }, drag] = useDrag({
     type: "TASK",
     item: () => ({
@@ -122,7 +122,7 @@ const TaskCard = memo(({ task, sectionId }) => {
         }
       }}
     >
-      {/* Task Title and Menu Button */}
+     
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="body2" sx={{ fontWeight: 500 }}>
           {task.name}
@@ -136,9 +136,9 @@ const TaskCard = memo(({ task, sectionId }) => {
         </Menu>
       </Box>
 
-      {/* Assignee Avatar, Due Date & Task Description (All in One Line) */}
+      
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        {/* Left Side: Avatar & Due Date */}
+     
         <Box display="flex" alignItems="center" gap={1}>
           <Tooltip title={task.assignee || "Unassigned"} arrow>
             <Avatar
@@ -159,7 +159,7 @@ const TaskCard = memo(({ task, sectionId }) => {
           </Typography>
         </Box>
 
-        {/* Right Side: Task Description as Button */}
+       
         {task.description && (
           <Button
             variant="contained"
@@ -185,7 +185,7 @@ const TaskCard = memo(({ task, sectionId }) => {
         )}
       </Box>
 
-      {/* Update Task Dialog */}
+     
       <UpdateTaskForm
         open={isUpdateFormOpen}
         onClose={() => setIsUpdateFormOpen(false)}

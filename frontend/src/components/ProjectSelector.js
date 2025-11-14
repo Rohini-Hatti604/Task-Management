@@ -90,7 +90,7 @@ const ProjectSelector = () => {
       setEditName("");
       dispatch(fetchProjects());
     } catch (e) {
-      // swallow; could add snackbar if desired
+      
     }
   };
 
@@ -108,7 +108,7 @@ const ProjectSelector = () => {
       setEditingProject(null);
       dispatch(fetchProjects());
     } catch (e) {
-      // swallow; could add snackbar if desired
+      
     }
   };
 
@@ -203,7 +203,7 @@ const ProjectSelector = () => {
         onSubmit={handleCreateProject}
       />
 
-      {/* Edit Project Dialog */}
+      
       <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogTitle>Rename Project</DialogTitle>
         <DialogContent>
@@ -222,7 +222,7 @@ const ProjectSelector = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Delete Project Confirm */}
+      
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>Delete Project</DialogTitle>
         <DialogContent>

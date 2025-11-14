@@ -49,6 +49,37 @@ export default class UserController {
       res.status(500).json({ message: "Server error" });
     }
   }
+
+  async getUserByEmail(req, res) {
+    try {
+      const { email } = req.query;
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+      const user = await UserService.findByEmail(email);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json(user);
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message || "Server error" });
+    }
+  }
+
+  async searchUsers(req, res) {
+    try {
+      const { search } = req.query;
+      if (!search || search.length < 2) {
+        return res.status(400).json({ message: "Search term must be at least 2 characters" });
+      }
+      const users = await UserService.searchUsers(search);
+      res.json(users);
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message || "Server error" });
+    }
+  }
 }
 
 

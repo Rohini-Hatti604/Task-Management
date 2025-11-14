@@ -192,7 +192,7 @@ const Section = memo(({ section }) => {
         )}
       </Box>
 
-      {/* Add Section Dialog */}
+     
       <Dialog open={isSectionFormOpen} onClose={() => {
         setIsSectionFormOpen(false);
         setNewSectionTitle("");
@@ -221,7 +221,7 @@ const Section = memo(({ section }) => {
         </DialogActions>
       </Dialog>
 
-      {/* Add Task Dialog */}
+    
       <TaskForm
         open={isTaskFormOpen}
         onClose={() => setIsTaskFormOpen(false)}

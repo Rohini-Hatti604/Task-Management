@@ -11,14 +11,14 @@ import {
 
 const TaskForm = ({ open, onClose, onSubmit }) => {
 
-  // Get logged-in user from Redux store
+  
   const user = useSelector((state) => state.auth.user);
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     dueDate: "",
-    assignee: user ? user.name : "", // Default to logged-in user's name
+    assignee: user ? user.name : "", 
   });
 
   useEffect(() => {

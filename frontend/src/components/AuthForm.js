@@ -35,18 +35,18 @@ const AuthForm = ({ open, handleClose }) => {
   // Handle successful signup
   useEffect(() => {
     if (signupSuccess) {
-      // After successful signup, switch to login mode with email pre-filled
+       pre-filled
       setIsLogin(true);
       setFormData(prev => ({
         name: "",
-        email: prev.email, // Keep the email
+        email: prev.email, 
         password: "",
         userPhoto: ""
       }));
     }
   }, [signupSuccess]);
 
-  // Close form when user is authenticated
+ 
   useEffect(() => {
     if (token) {
       resetForm();

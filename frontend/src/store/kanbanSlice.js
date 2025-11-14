@@ -122,13 +122,13 @@ const kanbanSlice = createSlice({
             })
             .addCase(addSection.fulfilled, (state, action) => {
                 state.loading = false;
-                // Ensure the new section has a tasks array
+                
                 const newSection = {
                     ...action.payload,
                     tasks: []
                 };
                 state.sections.push(newSection);
-                // Sort sections based on createdAt timestamp
+                
                 state.sections.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
             })
             .addCase(addSection.rejected, (state, action) => {
@@ -174,10 +174,10 @@ const kanbanSlice = createSlice({
                 const destSection = state.sections.find(s => s._id === destinationSectionId);
 
                 if (sourceSection && destSection) {
-                    // Remove task from source section
+                    
                     sourceSection.tasks = sourceSection.tasks.filter(t => t._id !== taskId);
 
-                    // Add task to destination section
+                    
                     if (!destSection.tasks) destSection.tasks = [];
                     destSection.tasks.push(task);
                 }

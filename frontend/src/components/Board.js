@@ -86,21 +86,20 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
 
-  // Fetch projects when user logs in
+
   useEffect(() => {
     if (token) {
       dispatch(fetchProjects());
     }
   }, [dispatch, token]);
 
-  // Fetch sections when project changes
   useEffect(() => {
     if (token && currentProject) {
       dispatch(fetchSections(currentProject._id));
     }
   }, [dispatch, token, currentProject]);
 
-  // Ensure re-render when token changes
+
   useEffect(() => {
     if (token) {
       dispatch(fetchCurrentUser());
@@ -262,7 +261,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
       <AppBar position="static" elevation={0} sx={{ bgcolor: theme.palette.background.paper, color: theme.palette.text.primary, boxShadow: 'none', borderBottom: `1px solid ${theme.palette.divider}` }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: 'nowrap', gap: 1, py: 1 }}>
 
-          {/* Left: Logo & Title */}
+          
           <Box display="flex" alignItems="center" gap={1} sx={{ flexShrink: 0 }}>
             {isMobile && (
               <IconButton
@@ -287,7 +286,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
                   </Typography>
                   {token && null}
                 </Box>
-                {/* Bottom row: boards • members caption + Project selector */}
+                
                 <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, flexWrap: 'nowrap' }}>
                   <Typography 
                     variant="caption" 
@@ -306,7 +305,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
             )}
           </Box>
           
-          {/* Center: Search + Filters */}
+         
           <Box
             display="flex"
             alignItems="center"
@@ -451,10 +450,10 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
           {token && (
             <Box sx={{ mt: 2 }}>
               <ProjectSelector />
-            </Box>
+          </Box>
           )}
 
-          {/* Add Section Button (At End, Aligned with Section Title) */}
+          
           <Box sx={{ display: "flex", alignItems: "center", height: "40px", mt: "10px", ml: "10px" }}>
             <Button variant="text" onClick={() => setIsSectionFormOpen(true)} sx={{ height: "40px", width: "200px", color: theme.palette.text.secondary }}>
               <AddIcon /> Add Section
@@ -496,7 +495,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
             </Box>
           ))}
 
-          {/* Add Section Button (At End, Aligned with Section Title) */}
+          
           <Box sx={{ display: "flex", alignItems: "center", height: "40px", mt: "10px", ml: "10px" }}>
             <Button variant="text" onClick={() => setIsSectionFormOpen(true)} sx={{ height: "40px", width: "200px", color: theme.palette.text.secondary }}>
               <AddIcon /> Add Section
@@ -522,7 +521,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
       {/* Auth Form Popup */}
       <AuthForm open={isAuthFormOpen} handleClose={() => setIsAuthFormOpen(false)} />
 
-      {/* Member Management Popup */}
+     
       {currentProject && (
         <MemberManagement
           open={isMemberManagementOpen}
@@ -531,7 +530,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
         />
       )}
 
-      {/* Snackbar for notifications */}
+      
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
@@ -546,7 +545,7 @@ const Board = ({ themeMode = 'light', onToggleTheme = () => {} }) => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-      {/* Error Snackbar */}
+     
       {kanbanError && (
         <Snackbar
           open={!!kanbanError}

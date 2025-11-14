@@ -39,10 +39,9 @@ const MemberManagement = ({ open, onClose, project }) => {
   const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
-    // In a real app, you'd have an endpoint to search users by email
-    // For now, we'll use a simple approach
+    
     if (open && project) {
-      // The members are already populated in the project object
+    
     }
   }, [open, project]);
 
@@ -68,7 +67,7 @@ const MemberManagement = ({ open, onClose, project }) => {
         return;
       }
 
-      // Check if user is already a member
+      
       const isAlreadyMember = project.members.some(m => {
         const memberId = typeof m === 'object' ? m._id : m;
         return memberId && memberId.toString() === user._id.toString();
@@ -82,7 +81,7 @@ const MemberManagement = ({ open, onClose, project }) => {
 
       // Add member to project
       await dispatch(addMember({ projectId: project._id, userId: user._id })).unwrap();
-      // Refresh project data
+     
       await dispatch(fetchProject(project._id));
       setEmailToAdd("");
       setError("");

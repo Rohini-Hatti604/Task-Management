@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../Axios/api";
 
-// Fetch all projects for the current user
+r
 export const fetchProjects = createAsyncThunk("project/fetchProjects", async () => {
     try {
         const response = await API.get("/project");
@@ -12,7 +12,7 @@ export const fetchProjects = createAsyncThunk("project/fetchProjects", async () 
     }
 });
 
-// Fetch a single project
+
 export const fetchProject = createAsyncThunk("project/fetchProject", async (projectId) => {
     try {
         const response = await API.get(`/project/${projectId}`);
@@ -23,7 +23,7 @@ export const fetchProject = createAsyncThunk("project/fetchProject", async (proj
     }
 });
 
-// Create a new project
+
 export const createProject = createAsyncThunk("project/createProject", async (projectData) => {
     try {
         const response = await API.post("/project", projectData);
@@ -34,7 +34,7 @@ export const createProject = createAsyncThunk("project/createProject", async (pr
     }
 });
 
-// Update a project
+
 export const updateProject = createAsyncThunk("project/updateProject", async ({ projectId, ...projectData }) => {
     try {
         const response = await API.put(`/project/${projectId}`, projectData);
@@ -45,7 +45,7 @@ export const updateProject = createAsyncThunk("project/updateProject", async ({ 
     }
 });
 
-// Delete a project
+t
 export const deleteProject = createAsyncThunk("project/deleteProject", async (projectId) => {
     try {
         await API.delete(`/project/${projectId}`);
@@ -67,7 +67,7 @@ export const addMember = createAsyncThunk("project/addMember", async ({ projectI
     }
 });
 
-// Remove member from project
+
 export const removeMember = createAsyncThunk("project/removeMember", async ({ projectId, userId }) => {
     try {
         const response = await API.delete(`/project/${projectId}/members`, { data: { userId } });
@@ -99,7 +99,7 @@ const projectSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // Fetch Projects
+           
             .addCase(fetchProjects.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -107,7 +107,7 @@ const projectSlice = createSlice({
             .addCase(fetchProjects.fulfilled, (state, action) => {
                 state.loading = false;
                 state.projects = action.payload;
-                // Set first project as current if none is set
+               
                 if (!state.currentProject && action.payload.length > 0) {
                     state.currentProject = action.payload[0];
                 }
@@ -116,7 +116,7 @@ const projectSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
-            // Fetch Single Project
+            
             .addCase(fetchProject.fulfilled, (state, action) => {
                 state.currentProject = action.payload;
                

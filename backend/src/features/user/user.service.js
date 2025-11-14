@@ -5,7 +5,7 @@ import { isValidImageURL, getDefaultAvatar } from "../utils/file.utils.js";
 
 class UserService {
   static async signup({ name, email, password, userPhoto }) {
-    // Basic validation
+   
     if (!name || typeof name !== "string" || name.trim().length < 2) {
       throw new Error("Name must be at least 2 characters long.");
     }
@@ -18,16 +18,16 @@ class UserService {
       throw new Error("Password must be at least 6 characters long.");
     }
 
-    // Check if email is already taken
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new Error("Email is already in use.");
     }
 
-    // Hash password
+  
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Validate image or assign default avatar
+   
     let finalPhoto = userPhoto;
     if (!userPhoto) {
       finalPhoto = getDefaultAvatar(name); // Generate avatar using Iran Liara API
@@ -35,7 +35,7 @@ class UserService {
       throw new Error("Invalid photo URL. Must be a .jpg, .jpeg, or .png link.");
     }
 
-    // Create and save user
+    
     const newUser = new User({ name, email, password: hashedPassword, userPhoto: finalPhoto });
     return await newUser.save();
   }
@@ -57,7 +57,7 @@ class UserService {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error("Password is incorrect");
 
-    // Generate token
+   
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
@@ -69,7 +69,7 @@ class UserService {
       user: {
         id: user.id,
         name: user.name,
-        userPhoto: user.userPhoto, // Include the userPhoto
+        userPhoto: user.userPhoto, 
         email: user.email
       }
     };
@@ -89,10 +89,35 @@ class UserService {
       const user = await User.findById(id);
 
       if (!user) {
-        return null; // Return null instead of throwing an error
+        return null; 
       }
 
       return user;
+    }
+    catch (err) {
+      throw new Error("Database error");
+    }
+  }
+
+  static async findByEmail(email) {
+    try {
+      const user = await User.findOne({ email }).select("-password");
+      return user;
+    }
+    catch (err) {
+      throw new Error("Database error");
+    }
+  }
+
+  static async searchUsers(searchTerm) {
+    try {
+      const users = await User.find({
+        $or: [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { email: { $regex: searchTerm, $options: 'i' } }
+        ]
+      }).select("-password").limit(10);
+      return users;
     }
     catch (err) {
       throw new Error("Database error");
