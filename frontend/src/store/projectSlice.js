@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../Axios/api";
 
-r
+// Fetch Projects
 export const fetchProjects = createAsyncThunk("project/fetchProjects", async () => {
     try {
         const response = await API.get("/project");
@@ -12,7 +12,7 @@ export const fetchProjects = createAsyncThunk("project/fetchProjects", async () 
     }
 });
 
-
+// Fetch a single project
 export const fetchProject = createAsyncThunk("project/fetchProject", async (projectId) => {
     try {
         const response = await API.get(`/project/${projectId}`);
@@ -23,7 +23,7 @@ export const fetchProject = createAsyncThunk("project/fetchProject", async (proj
     }
 });
 
-
+// Create Project
 export const createProject = createAsyncThunk("project/createProject", async (projectData) => {
     try {
         const response = await API.post("/project", projectData);
@@ -34,7 +34,7 @@ export const createProject = createAsyncThunk("project/createProject", async (pr
     }
 });
 
-
+// Update Project
 export const updateProject = createAsyncThunk("project/updateProject", async ({ projectId, ...projectData }) => {
     try {
         const response = await API.put(`/project/${projectId}`, projectData);
@@ -45,7 +45,7 @@ export const updateProject = createAsyncThunk("project/updateProject", async ({ 
     }
 });
 
-t
+// Delete Project
 export const deleteProject = createAsyncThunk("project/deleteProject", async (projectId) => {
     try {
         await API.delete(`/project/${projectId}`);
@@ -56,7 +56,7 @@ export const deleteProject = createAsyncThunk("project/deleteProject", async (pr
     }
 });
 
-// Add member to project
+// Add Member to Project
 export const addMember = createAsyncThunk("project/addMember", async ({ projectId, userId }) => {
     try {
         const response = await API.post(`/project/${projectId}/members`, { userId });
@@ -67,7 +67,7 @@ export const addMember = createAsyncThunk("project/addMember", async ({ projectI
     }
 });
 
-
+// Remove Member from Project
 export const removeMember = createAsyncThunk("project/removeMember", async ({ projectId, userId }) => {
     try {
         const response = await API.delete(`/project/${projectId}/members`, { data: { userId } });
@@ -99,7 +99,6 @@ const projectSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-           
             .addCase(fetchProjects.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -107,7 +106,6 @@ const projectSlice = createSlice({
             .addCase(fetchProjects.fulfilled, (state, action) => {
                 state.loading = false;
                 state.projects = action.payload;
-               
                 if (!state.currentProject && action.payload.length > 0) {
                     state.currentProject = action.payload[0];
                 }
@@ -116,10 +114,8 @@ const projectSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
             })
-            
             .addCase(fetchProject.fulfilled, (state, action) => {
                 state.currentProject = action.payload;
-               
                 const index = state.projects.findIndex(p => p._id === action.payload._id);
                 if (index !== -1) {
                     state.projects[index] = action.payload;
@@ -127,12 +123,10 @@ const projectSlice = createSlice({
                     state.projects.push(action.payload);
                 }
             })
-            // Create Project
             .addCase(createProject.fulfilled, (state, action) => {
                 state.projects.push(action.payload);
                 state.currentProject = action.payload;
             })
-            // Update Project
             .addCase(updateProject.fulfilled, (state, action) => {
                 const index = state.projects.findIndex(p => p._id === action.payload._id);
                 if (index !== -1) {
@@ -142,14 +136,12 @@ const projectSlice = createSlice({
                     state.currentProject = action.payload;
                 }
             })
-            // Delete Project
             .addCase(deleteProject.fulfilled, (state, action) => {
                 state.projects = state.projects.filter(p => p._id !== action.payload);
                 if (state.currentProject?._id === action.payload) {
                     state.currentProject = state.projects.length > 0 ? state.projects[0] : null;
                 }
             })
-            // Add Member
             .addCase(addMember.fulfilled, (state, action) => {
                 const index = state.projects.findIndex(p => p._id === action.payload._id);
                 if (index !== -1) {
@@ -159,7 +151,6 @@ const projectSlice = createSlice({
                     state.currentProject = action.payload;
                 }
             })
-            // Remove Member
             .addCase(removeMember.fulfilled, (state, action) => {
                 const index = state.projects.findIndex(p => p._id === action.payload._id);
                 if (index !== -1) {
@@ -174,4 +165,3 @@ const projectSlice = createSlice({
 
 export const { setCurrentProject, clearProjects } = projectSlice.actions;
 export default projectSlice.reducer;
-

@@ -35,18 +35,16 @@ const AuthForm = ({ open, handleClose }) => {
   // Handle successful signup
   useEffect(() => {
     if (signupSuccess) {
-       pre-filled
       setIsLogin(true);
-      setFormData(prev => ({
+      setFormData((prev) => ({
+        ...prev,
         name: "",
-        email: prev.email, 
         password: "",
-        userPhoto: ""
+        userPhoto: "",
       }));
     }
   }, [signupSuccess]);
 
- 
   useEffect(() => {
     if (token) {
       resetForm();
