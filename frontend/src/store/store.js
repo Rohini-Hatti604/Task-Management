@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import kanbanReducer from "./kanbanSlice";
-import authReducer from "./authSlice";  // Import auth slice
+import authReducer from "./authSlice";
+import projectReducer from "./projectSlice";
 
 const store = configureStore({
   reducer: {
     kanban: kanbanReducer,
-    auth: authReducer,  // Add auth reducer
+    auth: authReducer,
+    project: projectReducer,
   },
 });
 

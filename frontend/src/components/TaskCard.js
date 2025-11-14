@@ -11,6 +11,7 @@ import {
   Avatar,
   Button,
   Tooltip,
+  useTheme,
 } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import dayjs from "dayjs";
@@ -27,12 +28,30 @@ dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 dayjs.extend(isTomorrow);
 
-const formatDueDate = (dueDate) => {
+// Helpers to generate deterministic colored avatars from a name
+const stringToColor = (str = "") => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const c = (hash & 0x00ffffff).toString(16).toUpperCase();
+  return `#${"00000".substring(0, 6 - c.length) + c}`;
+};
+
+const getInitials = (name = "") => {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 0) return "?";
+  const first = parts[0][0] || "";
+  const second = parts[1]?.[0] || "";
+  return (first + second).toUpperCase();
+};
+
+const formatDueDate = (dueDate, theme) => {
   const date = dayjs(dueDate);
-  if (date.isToday()) return { text: "Today", color: "#48494C" };
-  if (date.isTomorrow()) return { text: "Tomorrow", color: "#3B82F6" }; // Blue
-  if (date.isYesterday()) return { text: "Yesterday", color: "#EF4444" }; // Red
-  return { text: date.format("DD MMM"), color: "#6B7280" }; // Gray
+  if (date.isToday()) return { text: "Today", color: theme.palette.text.secondary };
+  if (date.isTomorrow()) return { text: "Tomorrow", color: theme.palette.primary.main };
+  if (date.isYesterday()) return { text: "Yesterday", color: theme.palette.error.main };
+  return { text: date.format("DD MMM"), color: theme.palette.text.secondary };
 };
 
 
@@ -41,7 +60,8 @@ const TaskCard = memo(({ task, sectionId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
 
-  const { text: dueText, color: dueColor } = formatDueDate(task.dueDate);
+  const theme = useTheme();
+  const { text: dueText, color: dueColor } = formatDueDate(task.dueDate, theme);
 
   // Drag handling
   const [{ isDragging }, drag] = useDrag({
@@ -82,11 +102,12 @@ const TaskCard = memo(({ task, sectionId }) => {
       ref={drag}
       sx={{
         m: 1,
-        bgcolor: "#fff",
+        bgcolor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.background.paper,
         py: 1,
         px: 2,
         borderRadius: 2,
-        boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1)",
+        border: `1px solid ${theme.palette.divider}`,
+        boxShadow: theme.palette.mode === 'dark' ? '0 1px 2px rgba(0,0,0,0.6)' : '0px 1px 4px rgba(0,0,0,0.1)',
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -97,7 +118,7 @@ const TaskCard = memo(({ task, sectionId }) => {
         willChange: 'transform, opacity',
         transform: 'translate3d(0,0,0)',
         '&:hover': {
-          boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.15)",
+          boxShadow: theme.palette.mode === 'dark' ? '0 2px 6px rgba(0,0,0,0.7)' : '0 2px 8px rgba(0,0,0,0.15)',
         }
       }}
     >
@@ -106,7 +127,7 @@ const TaskCard = memo(({ task, sectionId }) => {
         <Typography variant="body2" sx={{ fontWeight: 500 }}>
           {task.name}
         </Typography>
-        <IconButton size="small" onClick={handleMenuOpen} sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}>
+        <IconButton size="small" onClick={handleMenuOpen} sx={{ '&:hover': { backgroundColor: theme.palette.action.hover } }}>
           <MoreHorizIcon />
         </IconButton>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} disableAutoFocusItem MenuListProps={{ onClick: handleMenuClose }}>
@@ -121,9 +142,17 @@ const TaskCard = memo(({ task, sectionId }) => {
         <Box display="flex" alignItems="center" gap={1}>
           <Tooltip title={task.assignee || "Unassigned"} arrow>
             <Avatar
-              src={task.assignee? `https://avatar.iran.liara.run/username?username=${task.assignee}` : "?"}
-              sx={{ width: 24, height: 24, fontSize: "0.875rem" }}
-            />
+              alt={task.assignee}
+              sx={{
+                width: 24,
+                height: 24,
+                fontSize: "0.75rem",
+                bgcolor: stringToColor(task.assignee || ""),
+                color: "#fff"
+              }}
+            >
+              {getInitials(task.assignee || "")}
+            </Avatar>
           </Tooltip>
           <Typography variant="caption" sx={{ fontWeight: 600, color: dueColor }}>
             {dueText}
@@ -136,8 +165,8 @@ const TaskCard = memo(({ task, sectionId }) => {
             variant="contained"
             size="small"
             sx={{
-              bgcolor: "#F3F4F6",
-              color: "#6B7280",
+              bgcolor: theme.palette.action.hover,
+              color: theme.palette.text.secondary,
               fontSize: "0.75rem",
               fontWeight: 600,
               textTransform: "none",
@@ -146,7 +175,7 @@ const TaskCard = memo(({ task, sectionId }) => {
               py: 0.5,
               width: "fit-content",
               '&:hover': {
-                bgcolor: "#E5E7EB",
+                bgcolor: theme.palette.action.selected,
               }
             }}
             disableElevation

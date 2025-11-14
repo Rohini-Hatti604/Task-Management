@@ -1,6 +1,6 @@
 import React, { useState, memo } from "react";
 import { useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTask, deleteSection, updateSection, moveTask, addSection } from "../store/kanbanSlice";
 import {
   Box,
@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  useTheme,
 } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddIcon from "@mui/icons-material/Add";
@@ -21,6 +22,7 @@ import TaskForm from "./TaskForm";
 
 const Section = memo(({ section }) => {
   const dispatch = useDispatch();
+  const currentProject = useSelector((state) => state.project.currentProject);
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false);
   const [isSectionFormOpen, setIsSectionFormOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -52,10 +54,17 @@ const Section = memo(({ section }) => {
     dispatch(addTask(newTask));
   };
 
+  
+
   const handleAddSection = () => {
     if (newSectionTitle.trim() !== "") {
+      if (!currentProject) {
+        alert("Please select a project first");
+        return;
+      }
       const sectionData = {
         name: newSectionTitle,
+        projectId: currentProject._id,
         selectedSectionId: section._id
       };
       dispatch(addSection(sectionData));
@@ -79,13 +88,17 @@ const Section = memo(({ section }) => {
     setMenuAnchorEl(null);
   };
 
+  const theme = useTheme();
+
   return (
     <Box 
       ref={drop} 
       height="100%" 
-      bgcolor="white" 
       p={2}
       sx={{
+        bgcolor: theme.palette.background.paper,
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: 2,
         opacity: isOver ? 0.7 : 1,
         transition: 'opacity 0.15s ease',
         willChange: 'opacity',
@@ -93,7 +106,7 @@ const Section = memo(({ section }) => {
       }}
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <h6 className="section-title">{section.name}</h6>
+        <h6 className="section-title" style={{ color: theme.palette.text.primary }}>{section.name}</h6>
         <Box>
           <IconButton onClick={() => setIsSectionFormOpen(true)}>
             <AddIcon />
@@ -125,7 +138,7 @@ const Section = memo(({ section }) => {
           height: "95%",
           overflowY: "auto",
           scrollbarWidth: "thin",
-          bgcolor: "#F5F5F5",
+          bgcolor: theme.palette.action.hover,
           padding: 1,
           borderRadius: 2,
           minHeight: "200px",
@@ -133,7 +146,20 @@ const Section = memo(({ section }) => {
         }}
       >
         {(!section.tasks || section.tasks.length === 0) && (
-          <Button variant="text" fullWidth onClick={() => setIsTaskFormOpen(true)} sx={{ color: "#a2a5ab", mt: 1 }}>
+          <Button
+            fullWidth
+            onClick={() => setIsTaskFormOpen(true)}
+            sx={{
+              color: theme.palette.text.secondary,
+              mt: 1,
+              bgcolor: theme.palette.action.hover,
+              textTransform: "uppercase",
+              fontWeight: 600,
+              borderRadius: 2,
+              py: 0.75,
+              '&:hover': { bgcolor: theme.palette.action.selected }
+            }}
+          >
             + Add Task
           </Button>
         )}
@@ -147,7 +173,20 @@ const Section = memo(({ section }) => {
         ))}
 
         {section.tasks?.length > 0 && (
-          <Button variant="text" fullWidth onClick={() => setIsTaskFormOpen(true)} sx={{ color: "#a2a5ab", mt: 1 }}>
+          <Button
+            fullWidth
+            onClick={() => setIsTaskFormOpen(true)}
+            sx={{
+              color: theme.palette.text.secondary,
+              mt: 1,
+              bgcolor: theme.palette.action.hover,
+              textTransform: "uppercase",
+              fontWeight: 600,
+              borderRadius: 2,
+              py: 0.75,
+              '&:hover': { bgcolor: theme.palette.action.selected }
+            }}
+          >
             + Add Task
           </Button>
         )}

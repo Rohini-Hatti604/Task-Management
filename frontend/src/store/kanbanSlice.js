@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../Axios/api";
 
-export const fetchSections = createAsyncThunk("kanban/fetchSections", async () => {
-    const response = await API.get("/section");
+export const fetchSections = createAsyncThunk("kanban/fetchSections", async (projectId) => {
+    
+    const url = projectId ? `/section?projectId=${projectId}` : '/section';
+    const response = await API.get(url);
     return response.data;
 });
 
@@ -14,10 +16,16 @@ const initialState = {
 
 export const addSection = createAsyncThunk("kanban/addSection", async (sectionData) => {
     try {
-        const response = await API.post('/section', sectionData);
+        const response = await API.post('/section', {
+            name: sectionData.name,
+            projectId: sectionData.projectId, // Required now
+            selectedSectionId: sectionData.selectedSectionId
+        });
         return response.data;
     } catch (error) {
-        throw error;
+       
+        const errorMessage = error.response?.data?.message || error.message || "Failed to add section";
+        throw new Error(errorMessage);
     }
 });
 
@@ -56,7 +64,7 @@ export const moveTask = createAsyncThunk(
     'kanban/moveTask',
     async ({ taskId, sourceSectionId, destinationSectionId }, { dispatch }) => {
         try {
-            // Call the backend API to update the task
+            
             const response = await API.patch(`/task/move`, {
                 taskId,
                 sourceSectionId,

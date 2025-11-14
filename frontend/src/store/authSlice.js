@@ -71,6 +71,10 @@ const authSlice = createSlice({
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        // If fetching current user fails (e.g., 401), clear auth so UI can prompt login
+        state.user = null;
+        state.token = null;
+        try { localStorage.removeItem("token"); localStorage.removeItem("user"); } catch (e) {}
       })
       // Signup
       .addCase(signupUser.pending, (state) => {
