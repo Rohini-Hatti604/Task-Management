@@ -4,13 +4,13 @@ A full-stack task management application with projects, tasks, and team collabor
 
 ## Features
 
-- ✅ **User Authentication**: JWT-based sign up, log in, log out
-- ✅ **Projects Management**: Create, update, delete projects
-- ✅ **Tasks Management**: Create tasks with title, description, assignee, due date, and status
-- ✅ **Kanban Board**: Drag-and-drop task board with sections (To Do, In Progress, Done)
-- ✅ **User Management**: Projects can have multiple members; only project members can manage tasks
-- ✅ **Responsive UI**: Mobile-friendly design
-- ✅ **Error Handling**: Comprehensive error handling with user feedback
+-  **User Authentication**: JWT-based sign up, log in, log out
+-  **Projects Management**: Create, update, delete projects
+-  **Tasks Management**: Create tasks with title, description, assignee, due date, and status
+-  **Kanban Board**: Drag-and-drop task board with sections (To Do, In Progress, Done)
+-  **User Management**: Projects can have multiple members; only project members can manage tasks
+-  **Responsive UI**: Mobile-friendly design
+-  **Error Handling**: Comprehensive error handling with user feedback
 
 ## Tech Stack
 
