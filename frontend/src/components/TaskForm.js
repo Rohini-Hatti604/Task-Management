@@ -53,14 +53,6 @@ const TaskForm = ({ open, onClose, onSubmit }) => {
         />
 
         <TextField
-          name="priority"
-          label="Priority"
-          fullWidth
-          margin="dense"
-          value={formData.name}
-          onChange={handleChange}
-        />
-        <TextField
           name="description"
           label="Description"
           fullWidth
